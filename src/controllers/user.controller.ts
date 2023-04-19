@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import { type Login, type Users } from '../types'
+import { type UpdatePassword, type Login, type Users } from '../types'
 import bcrypt from 'bcrypt'
 import User from '../database/models/User'
 import { randomPassword } from '../utils/randomPassword'
@@ -88,19 +88,21 @@ export const loginUser = async (userlog: Login): Promise<any> => {
   }
 }
 
-export const updatePassword = async (req: Request, res: Response): Promise<void> => {
-  const { email, newPassword } = req.body
+export const updatePassword = async (update: UpdatePassword): Promise<any> => {
+  const { email, newPassword } = update
 
-  try {
-    const user = await User.findOne({ email })
-    if (user !== null) {
+  const user = await User.findOne({ email })
+  if (user !== null) {
+    try {
       const passwordHash = await bcrypt.hash(newPassword, 10)
       user.password = passwordHash
       await user.save()
+      return { message: 'La contraseña se actualizó correctamente' }
+    } catch (error) {
+      throw Error('No se pudo actualizar la contraseña, intenta de nuevo')
     }
-    res.status(200).json({ message: 'Update password correctly' })
-  } catch (error) {
-    console.error(error)
+  } else {
+    throw Error('Usuario no encontrado')
   }
 }
 

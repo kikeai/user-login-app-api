@@ -12,3 +12,8 @@ export interface Login {
   password: string
   google_id: string
 }
+
+export interface UpdatePassword {
+  email: string
+  newPassword: string
+}
