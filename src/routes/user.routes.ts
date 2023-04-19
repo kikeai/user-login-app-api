@@ -39,8 +39,22 @@ userRoute.put('/password', async (req, res, next) => {
   }
 })
 
-userRoute.put('/username', updateUsername)
+userRoute.put('/username', async (req, res, next) => {
+  try {
+    const newUser = await updateUsername(req.body)
+    res.status(200).send(newUser)
+  } catch (error: any) {
+    res.status(400).json({ error: error.message })
+  }
+})
 
-userRoute.put('/image', updateImage)
+userRoute.put('/image', async (req, res, next) => {
+  try {
+    const newUser = await updateImage(req.body)
+    res.status(200).send(newUser)
+  } catch (error: any) {
+    res.status(400).json({ error: error.message })
+  }
+})
 
 export default userRoute

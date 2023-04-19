@@ -17,3 +17,13 @@ export interface UpdatePassword {
   email: string
   newPassword: string
 }
+
+export interface UpdateUsername {
+  email: string
+  newUsername: string
+}
+
+export interface UpdateImage {
+  email: string
+  newImage: string
+}

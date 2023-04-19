@@ -1,5 +1,4 @@
-import { type Request, type Response } from 'express'
-import { type UpdatePassword, type Login, type Users } from '../types'
+import { type UpdatePassword, type Login, type Users, type UpdateUsername, type UpdateImage } from '../types'
 import bcrypt from 'bcrypt'
 import User from '../database/models/User'
 import { randomPassword } from '../utils/randomPassword'
@@ -106,26 +105,35 @@ export const updatePassword = async (update: UpdatePassword): Promise<any> => {
   }
 }
 
-export const updateUsername = async (req: Request, res: Response): Promise<void> => {
-  const { email, newUsername } = req.body
-
+export const updateUsername = async (update: UpdateUsername): Promise<any> => {
+  const { email, newUsername } = update
   const user = await User.findOne({ email })
   if (user !== null) {
-    user.username = newUsername
-    await user.save()
+    try {
+      user.username = newUsername
+      await user.save()
+      return user
+    } catch (error) {
+      throw Error('No se pudo actualizar el usuario, intenta de nuevo')
+    }
+  } else {
+    throw Error('Usuario no encontrado')
   }
-
-  res.status(200).json(user)
 }
 
-export const updateImage = async (req: Request, res: Response): Promise<void> => {
-  const { email, newImage } = req.body
+export const updateImage = async (update: UpdateImage): Promise<any> => {
+  const { email, newImage } = update
 
   const user = await User.findOne({ email })
   if (user !== null) {
-    user.image = newImage
-    await user.save()
+    try {
+      user.image = newImage
+      await user.save()
+      return user
+    } catch (error) {
+      throw Error('No se pudo actualizar la imagen, intenta de nuevo')
+    }
+  } else {
+    throw Error('Usuario no encontrado')
   }
-
-  res.status(200).json(user)
 }
