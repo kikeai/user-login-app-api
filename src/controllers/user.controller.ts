@@ -16,13 +16,13 @@ export const getUsers = async (): Promise<any> => {
   }
 }
 
-export const singupUser = async (req: Request, res: Response): Promise<void> => {
-  const { name, email, username, password, google_id, image }: Users = req.body
+export const singupUser = async (newUser: Users): Promise<any> => {
+  const { name, email, username, password, google_id, image }: Users = newUser
   // Encuetro el user atraves del email
   const user = await User.findOne({ email })
   // Si encuentra un usuario envia un error
   if (user !== null) {
-    res.status(400).json({ error: 'Este email ya esta registrado' })
+    throw Error('Este email ya esta registrado')
   } else {
     // Inicializo dos variables para asignarles su valor hasheado por bcrypt
     let passwordHash = randomPassword(10)
@@ -33,16 +33,19 @@ export const singupUser = async (req: Request, res: Response): Promise<void> => 
     } else {
       passwordHash = await bcrypt.hash(password, 10)
     }
-    const newUser = await User.create({
-      name,
-      email,
-      username,
-      password: passwordHash,
-      google_id: googleIdHash,
-      image
-    })
-
-    res.status(200).send(newUser)
+    try {
+      const newUser = await User.create({
+        name,
+        email,
+        username,
+        password: passwordHash,
+        google_id: googleIdHash,
+        image
+      })
+      return newUser
+    } catch (error) {
+      throw Error('El usuario no pudo ser creado')
+    }
   }
 }
 
