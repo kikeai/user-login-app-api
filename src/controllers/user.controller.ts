@@ -4,9 +4,16 @@ import bcrypt from 'bcrypt'
 import User from '../database/models/User'
 import { randomPassword } from '../utils/randomPassword'
 
-export const getUsers = async (req: Request, res: Response): Promise<void> => {
-  const users = await User.find()
-  res.send(users)
+export const getUsers = async (): Promise<any> => {
+  try {
+    const users = await User.find()
+    if (users[0] === undefined) {
+      throw Error('Usuarios no encontrados')
+    }
+    return users
+  } catch (error: any) {
+    throw Error(error.message)
+  }
 }
 
 export const singupUser = async (req: Request, res: Response): Promise<void> => {
@@ -71,14 +78,17 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 export const updatePassword = async (req: Request, res: Response): Promise<void> => {
   const { email, newPassword } = req.body
 
-  const user = await User.findOne({ email })
-  if (user !== null) {
-    const passwordHash = await bcrypt.hash(newPassword, 10)
-    user.password = passwordHash
-    await user.save()
+  try {
+    const user = await User.findOne({ email })
+    if (user !== null) {
+      const passwordHash = await bcrypt.hash(newPassword, 10)
+      user.password = passwordHash
+      await user.save()
+    }
+    res.status(200).json({ message: 'Update password correctly' })
+  } catch (error) {
+    console.error(error)
   }
-
-  res.status(200).json({ message: 'Update password correctly' })
 }
 
 export const updateUsername = async (req: Request, res: Response): Promise<void> => {

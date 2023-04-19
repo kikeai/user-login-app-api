@@ -3,7 +3,14 @@ import { getUsers, loginUser, singupUser, updateImage, updatePassword, updateUse
 
 const userRoute = Router()
 
-userRoute.get('/', getUsers)
+userRoute.get('/', async (req, res, next) => {
+  try {
+    const users = await getUsers()
+    res.send(users)
+  } catch (error: any) {
+    res.status(400).json({ error: error.message })
+  }
+})
 
 userRoute.post('/', singupUser)
 

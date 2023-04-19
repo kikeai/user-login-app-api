@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import index from './routes'
 import connectDb from './database/database'
 import * as dotenv from 'dotenv'
+import { notFound } from './middlewares/notFound'
 dotenv.config()
 const { PORT } = process.env
 
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
   next()
 })
 app.use(index)
+app.use(notFound)
 
 app.listen(PORT, () => {
   console.log('server run on port', PORT)
