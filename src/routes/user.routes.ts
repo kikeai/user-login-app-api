@@ -21,7 +21,14 @@ userRoute.post('/', async (req, res, next) => {
   }
 })
 
-userRoute.post('/login', loginUser)
+userRoute.post('/login', async (req, res, next) => {
+  try {
+    const userLogged = await loginUser(req.body)
+    res.status(200).send(userLogged)
+  } catch (error: any) {
+    res.status(400).json({ error: error.message })
+  }
+})
 
 userRoute.put('/password', updatePassword)
 

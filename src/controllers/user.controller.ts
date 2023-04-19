@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import { type Users } from '../types'
+import { type Login, type Users } from '../types'
 import bcrypt from 'bcrypt'
 import User from '../database/models/User'
 import { randomPassword } from '../utils/randomPassword'
@@ -49,8 +49,8 @@ export const singupUser = async (newUser: Users): Promise<any> => {
   }
 }
 
-export const loginUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, password, google_id } = req.body
+export const loginUser = async (userlog: Login): Promise<any> => {
+  const { email, password, google_id } = userlog
   // Busco si existe el usuario en la base de datos por el email
   const user = await User.findOne({ email })
   // Procedimiento si el usuario existe
@@ -59,22 +59,32 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     if (password !== '' && google_id === null && user.password !== undefined) {
       const comparePassword = await bcrypt.compare(password, user.password)
       if (comparePassword) {
-        res.status(200).json({ name: user.name, email: user.email, username: user.username, image: user.image })
+        return user
       } else {
-        res.status(401).json({ error: 'contraseña incorrecta' })
+        throw Error('contraseña incorrecta')
+      }
+    // Procedimiento si esta registrado pero no con google
+    } else if (password === '' && google_id !== null && user.google_id === '') {
+      const googleHash = await bcrypt.hash(google_id, 10)
+      try {
+        user.google_id = googleHash
+        await user.save()
+        return user
+      } catch (error) {
+        throw Error('No se pudo iniciar sesión')
       }
     // Procedimiento si se incia con googleAuth
     } else if (password === '' && google_id !== null && user.google_id !== undefined) {
       const compareGoogleId = await bcrypt.compare(google_id, user.google_id)
       if (compareGoogleId) {
-        res.status(200).json({ name: user.name, email: user.email, username: user.username, image: user.image })
+        return user
       } else {
-        res.status(401).json({ error: 'contraseña incorrecta' })
+        throw Error('contraseña incorrecta')
       }
     }
   // Procedemiento si el usuario no existe
   } else {
-    res.status(400).json({ error: 'No existe una cueta asociada a este email' })
+    throw Error('No existe una cueta asociada a este email')
   }
 }
 

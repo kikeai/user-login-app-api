@@ -6,3 +6,9 @@ export interface Users {
   google_id: string
   image: string
 }
+
+export interface Login {
+  email: string
+  password: string
+  google_id: string
+}
