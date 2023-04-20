@@ -29,6 +29,7 @@ export const singupUser = async (newUser: Users): Promise<any> => {
 
     if (google_id !== null) {
       googleIdHash = await bcrypt.hash(google_id, 10)
+      passwordHash = await bcrypt.hash(passwordHash, 10)
     } else {
       passwordHash = await bcrypt.hash(password, 10)
     }
