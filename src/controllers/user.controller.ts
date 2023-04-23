@@ -1,4 +1,4 @@
-import { type UpdatePassword, type Login, type Users, type UpdateUsername, type UpdateImage } from '../types'
+import { type UpdatePassword, type Login, type Users, type UpdateUsername, type UpdateImage, type AvailableUsername } from '../types'
 import bcrypt from 'bcrypt'
 import User from '../database/models/User'
 import { randomPassword } from '../utils/randomPassword'
@@ -136,5 +136,15 @@ export const updateImage = async (update: UpdateImage): Promise<any> => {
     }
   } else {
     throw Error('Usuario no encontrado')
+  }
+}
+
+export const availibleUsername = async (available: AvailableUsername): Promise<any> => {
+  const { username } = available
+  const user = await User.findOne({ username })
+  if (user !== null) {
+    return { response: 'Exist' }
+  } else {
+    return { response: 'No Exist' }
   }
 }

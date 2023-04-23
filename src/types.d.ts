@@ -27,3 +27,7 @@ export interface UpdateImage {
   email: string
   newImage: string
 }
+
+export interface AvailableUsername {
+  username: string
+}

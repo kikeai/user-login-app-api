@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getUsers, loginUser, singupUser, updateImage, updatePassword, updateUsername } from '../controllers/user.controller'
+import { availibleUsername, getUsers, loginUser, singupUser, updateImage, updatePassword, updateUsername } from '../controllers/user.controller'
 
 const userRoute = Router()
 
@@ -27,6 +27,15 @@ userRoute.post('/login', async (req, res, next) => {
     res.status(200).send(userLogged)
   } catch (error: any) {
     res.status(400).json({ error: error.message })
+  }
+})
+
+userRoute.post('/checkusername', async (req, res, next) => {
+  try {
+    const userCheck = await availibleUsername(req.body)
+    res.status(200).send(userCheck)
+  } catch (error: any) {
+    res.status(400).json({ error })
   }
 })
 
