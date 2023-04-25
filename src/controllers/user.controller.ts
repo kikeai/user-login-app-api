@@ -93,13 +93,20 @@ export const updatePassword = async (update: UpdatePassword): Promise<any> => {
 
   const user = await User.findOne({ email })
   if (user !== null) {
-    try {
-      const passwordHash = await bcrypt.hash(newPassword, 10)
-      user.password = passwordHash
-      await user.save()
-      return { message: 'La contraseña se actualizó correctamente' }
-    } catch (error) {
-      throw Error('No se pudo actualizar la contraseña, intenta de nuevo')
+    if (user.password !== undefined) {
+      const samePassword = await bcrypt.compare(newPassword, user.password)
+      if (samePassword) {
+        throw Error('Ya estas usando esta contraseña')
+      } else {
+        try {
+          const passwordHash = await bcrypt.hash(newPassword, 10)
+          user.password = passwordHash
+          await user.save()
+          return { message: 'La contraseña se actualizó correctamente' }
+        } catch (error) {
+          throw Error('No se pudo actualizar la contraseña, intenta de nuevo')
+        }
+      }
     }
   } else {
     throw Error('Usuario no encontrado')
