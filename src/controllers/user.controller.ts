@@ -61,7 +61,7 @@ export const loginUser = async (userlog: Login): Promise<any> => {
       if (comparePassword) {
         return user
       } else {
-        throw Error('contraseña incorrecta')
+        throw Error('Usuario o contraseña invalido')
       }
     // Procedimiento si esta registrado pero no con google
     } else if (password === '' && google_id !== null && user.google_id === '') {
@@ -79,12 +79,12 @@ export const loginUser = async (userlog: Login): Promise<any> => {
       if (compareGoogleId) {
         return user
       } else {
-        throw Error('contraseña incorrecta')
+        throw Error('Usuario o contraseña invalido')
       }
     }
   // Procedemiento si el usuario no existe
   } else {
-    throw Error('No existe una cueta asociada a este email')
+    throw Error('Usuario o contraseña invalido')
   }
 }
 

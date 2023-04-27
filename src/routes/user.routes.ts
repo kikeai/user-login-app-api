@@ -1,15 +1,22 @@
 import { Router } from 'express'
-import { availibleUsername, getUsers, loginUser, singupUser, updateImage, updatePassword, updateUsername } from '../controllers/user.controller'
+import { availibleUsername, loginUser, singupUser, updateImage, updatePassword, updateUsername } from '../controllers/user.controller'
+import User from '../database/models/User'
 
 const userRoute = Router()
 
 userRoute.get('/', async (req, res, next) => {
-  try {
-    const users = await getUsers()
-    res.send(users)
-  } catch (error: any) {
-    res.status(400).json({ error: error.message })
+  const users = await User.find()
+  if (users[0] === undefined) {
+    next()
+    return
   }
+  res.status(200).send(users)
+  // try {
+  //   const users = await getUsers()
+  //   res.send(users)
+  // } catch (error: any) {
+  //   res.status(400).json({ error: error.message })
+  // }
 })
 
 userRoute.post('/', async (req, res, next) => {

@@ -4,6 +4,7 @@ import index from './routes'
 import connectDb from './database/database'
 import * as dotenv from 'dotenv'
 import { notFound } from './middlewares/notFound'
+import { errorHandler } from './middlewares/errorHandler'
 dotenv.config()
 const { PORT } = process.env
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
   next()
 })
 app.use(index)
+app.use(errorHandler)
 app.use(notFound)
 
 app.listen(PORT, () => {
