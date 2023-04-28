@@ -13,6 +13,7 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/no-misused-promises': 'off',
-    '@typescript-eslint/naming-convention': 'off'
+    '@typescript-eslint/naming-convention': 'off',
+    'no-prototype-builtins': 'off'
   }
 }

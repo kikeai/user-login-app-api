@@ -31,3 +31,14 @@ export interface UpdateImage {
 export interface AvailableUsername {
   username: string
 }
+
+export interface DecodedToken {
+  id: string
+  username: string
+}
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    userId?: string
+  }
+}
