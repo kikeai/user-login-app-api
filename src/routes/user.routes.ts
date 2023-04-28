@@ -7,13 +7,14 @@ import { userStractor } from '../middlewares/userStractor'
 
 const userRoute = Router()
 
-userRoute.get('/', async (req, res, next) => {
-  const users = await User.find()
-  if (users[0] === undefined) {
+userRoute.get('/', userStractor, async (req, res, next) => {
+  const { userId } = req
+  const user = await User.findById(userId)
+  if (user === null) {
     next()
     return
   }
-  res.status(200).send(users)
+  res.status(200).send(user)
 })
 
 userRoute.post('/', async (req, res, next) => {
@@ -153,9 +154,11 @@ userRoute.put('/password', userStractor, async (req, res, next) => {
   }
 })
 
-userRoute.put('/username', async (req, res, next) => {
-  const { email, newUsername } = req.body
-  const user = await User.findOne({ email })
+userRoute.put('/username', userStractor, async (req, res, next) => {
+  const { newUsername } = req.body
+  const { userId } = req
+
+  const user = await User.findById(userId)
   if (user !== null) {
     try {
       user.username = newUsername
@@ -169,10 +172,11 @@ userRoute.put('/username', async (req, res, next) => {
   }
 })
 
-userRoute.put('/image', async (req, res, next) => {
-  const { email, newImage } = req.body
+userRoute.put('/image', userStractor, async (req, res, next) => {
+  const { newImage } = req.body
+  const { userId } = req
 
-  const user = await User.findOne({ email })
+  const user = await User.findById(userId)
   if (user !== null) {
     try {
       user.image = newImage
