@@ -54,7 +54,11 @@ userRoute.post('/', async (req, res, next) => {
         }
       )
 
-      res.send({ token })
+      res.cookie('authToken', token, {
+        sameSite: 'lax',
+        path: '/',
+        httpOnly: true
+      }).send('Token initialized')
     } catch (error) {
       next(error)
     }
@@ -83,7 +87,11 @@ userRoute.post('/login', async (req, res, next) => {
           }
         )
 
-        res.send({ token })
+        res.cookie('authToken', token, {
+          sameSite: 'lax',
+          path: '/',
+          httpOnly: true
+        }).send('Token initialized')
       } else {
         res.status(401).json({ error: 'Usuario o contraseña invalido' })
       }
@@ -94,7 +102,11 @@ userRoute.post('/login', async (req, res, next) => {
         await user.save()
         const token = jwt.sign(userForToken, '123')
 
-        res.send({ token })
+        res.cookie('authToken', token, {
+          sameSite: 'lax',
+          path: '/',
+          httpOnly: true
+        }).send('Token initialized')
       } catch (error) {
         next(error)
       }
@@ -103,7 +115,11 @@ userRoute.post('/login', async (req, res, next) => {
       if (user.google_id === google_id) {
         const token = jwt.sign(userForToken, '123')
 
-        res.send({ token })
+        res.cookie('authToken', token, {
+          sameSite: 'lax',
+          path: '/',
+          httpOnly: true
+        }).send('Token initialized')
       } else {
         res.status(401).json({ error: 'Usuario o contraseña invalido' })
       }
