@@ -197,7 +197,7 @@ userRoute.put('/username', userStractor, async (req, res, next) => {
     try {
       user.username = newUsername
       await user.save()
-      res.send(user)
+      res.json({ message: 'El usuario se actualizó correctamente' })
     } catch (error) {
       next(error)
     }
@@ -215,7 +215,7 @@ userRoute.put('/image', userStractor, async (req, res, next) => {
     try {
       user.image = newImage
       await user.save()
-      res.send(user)
+      res.json({ message: 'La imagen se actualizó correctamente' })
     } catch (error) {
       next(error)
     }
