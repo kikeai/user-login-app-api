@@ -1,7 +1,16 @@
 import mongoose from 'mongoose'
+import * as dotenv from 'dotenv'
+dotenv.config()
+const { MONGO_PASSWORD } = process.env
+
+if (MONGO_PASSWORD === undefined) {
+  throw new Error('Mongo password is not defined')
+}
+
+const mongoURL = `mongodb+srv://kikeai:${MONGO_PASSWORD}@userapp.chcaqva.mongodb.net/?retryWrites=true&w=majority`
 
 const connectDb = function (): void {
-  mongoose.connect('mongodb://127.0.0.1:27017/userApp')
+  mongoose.connect(mongoURL)
     .then(res => {
       console.log('DATABASE CONNECTED')
     })
