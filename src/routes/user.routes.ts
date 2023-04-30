@@ -1,9 +1,15 @@
 import { Router } from 'express'
 import User from '../database/models/User'
 import bcrypt from 'bcrypt'
+import * as dotenv from 'dotenv'
 import { randomPassword } from '../utils/randomPassword'
 import jwt from 'jsonwebtoken'
 import { userStractor } from '../middlewares/userStractor'
+dotenv.config()
+const { SECRET_WORD } = process.env
+if (SECRET_WORD === undefined) {
+  throw new Error('secret word no declarated')
+}
 
 const userRoute = Router()
 
@@ -48,7 +54,7 @@ userRoute.post('/', async (req, res, next) => {
       }
       const token = jwt.sign(
         userForToken,
-        '123',
+        SECRET_WORD,
         {
           expiresIn: 60 * 60 * 24 * 7
         }
@@ -81,7 +87,7 @@ userRoute.post('/login', async (req, res, next) => {
       if (comparePassword) {
         const token = jwt.sign(
           userForToken,
-          '123',
+          SECRET_WORD,
           {
             expiresIn: 60 * 60 * 24 * 7
           }
@@ -100,7 +106,13 @@ userRoute.post('/login', async (req, res, next) => {
       try {
         user.google_id = google_id
         await user.save()
-        const token = jwt.sign(userForToken, '123')
+        const token = jwt.sign(
+          userForToken,
+          SECRET_WORD,
+          {
+            expiresIn: 60 * 60 * 24 * 7
+          }
+        )
 
         res.cookie('authToken', token, {
           sameSite: 'lax',
@@ -113,7 +125,13 @@ userRoute.post('/login', async (req, res, next) => {
     // Procedimiento si se incia con googleAuth
     } else if (password === '' && google_id !== null && user.google_id !== undefined) {
       if (user.google_id === google_id) {
-        const token = jwt.sign(userForToken, '123')
+        const token = jwt.sign(
+          userForToken,
+          SECRET_WORD,
+          {
+            expiresIn: 60 * 60 * 24 * 7
+          }
+        )
 
         res.cookie('authToken', token, {
           sameSite: 'lax',
