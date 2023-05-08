@@ -1,0 +1,17 @@
+{
+  "builds": [
+    {
+      "src": "src/server.ts",
+      "use": "@vercel/node@1.11.0"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
