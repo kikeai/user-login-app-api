@@ -96,7 +96,7 @@ userRoute.post('/login', async (req, res, next) => {
         res.cookie('authToken', token, {
           sameSite: 'lax',
           path: '/',
-          httpOnly: true
+          httpOnly: false
         }).send('Token initialized')
       } else {
         res.status(401).json({ error: 'Usuario o contraseña invalido' })
@@ -117,7 +117,7 @@ userRoute.post('/login', async (req, res, next) => {
         res.cookie('authToken', token, {
           sameSite: 'lax',
           path: '/',
-          httpOnly: true
+          httpOnly: false
         }).send('Token initialized')
       } catch (error) {
         next(error)
@@ -136,7 +136,7 @@ userRoute.post('/login', async (req, res, next) => {
         res.cookie('authToken', token, {
           sameSite: 'lax',
           path: '/',
-          httpOnly: true
+          httpOnly: false
         }).send('Token initialized')
       } else {
         res.status(401).json({ error: 'Usuario o contraseña invalido' })
