@@ -1,17 +1,3 @@
 {
-  "builds": [
-    {
-      "src": "src/server.ts",
-      "use": "@vercel/node@1.11.0"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
