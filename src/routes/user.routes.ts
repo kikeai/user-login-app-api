@@ -94,11 +94,10 @@ userRoute.post('/login', async (req, res, next) => {
         )
 
         res.cookie('authToken', token, {
-          sameSite: 'none',
+          sameSite: 'lax',
           path: '/',
           httpOnly: true
-        })
-        res.send('Token initialized')
+        }).send('Token initialized')
       } else {
         res.status(401).json({ error: 'Usuario o contraseña invalido' })
       }
