@@ -97,7 +97,8 @@ userRoute.post('/login', async (req, res, next) => {
           sameSite: 'none',
           path: '/',
           httpOnly: true
-        }).send('Token initialized')
+        })
+        res.send('Token initialized')
       } else {
         res.status(401).json({ error: 'Usuario o contraseña invalido' })
       }
