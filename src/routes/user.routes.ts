@@ -94,7 +94,7 @@ userRoute.post('/login', async (req, res, next) => {
         )
 
         res.cookie('authToken', token, {
-          sameSite: 'lax',
+          sameSite: 'none',
           path: '/',
           httpOnly: true
         }).send('Token initialized')

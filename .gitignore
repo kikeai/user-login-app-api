@@ -145,3 +145,4 @@ dist
 api/config/config.js
 api/config/config.js
 api/config/config.js
+.vercel
