@@ -94,9 +94,9 @@ userRoute.post('/login', async (req, res, next) => {
         )
 
         res.cookie('authToken', token, {
-          sameSite: 'lax',
+          sameSite: 'none',
           path: '/',
-          httpOnly: false,
+          httpOnly: true,
           secure: true
         }).send('Token initialized')
       } else {
@@ -116,9 +116,9 @@ userRoute.post('/login', async (req, res, next) => {
         )
 
         res.cookie('authToken', token, {
-          sameSite: 'lax',
+          sameSite: 'none',
           path: '/',
-          httpOnly: false,
+          httpOnly: true,
           secure: true
         }).send('Token initialized')
       } catch (error) {
@@ -136,9 +136,9 @@ userRoute.post('/login', async (req, res, next) => {
         )
 
         res.cookie('authToken', token, {
-          sameSite: 'lax',
+          sameSite: 'none',
           path: '/',
-          httpOnly: false,
+          httpOnly: true,
           secure: true
         }).send('Token initialized')
       } else {
